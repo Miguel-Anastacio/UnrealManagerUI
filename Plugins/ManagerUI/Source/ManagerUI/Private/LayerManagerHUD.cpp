@@ -6,14 +6,24 @@
 
 void ALayerManagerHUD::RegisterDefaultLayer(const FString& name)
 {
-	LayersUI.Add(name, NewObject<ULayerUI>());
+	LayersUI.Emplace(name, NewObject<ULayerUI>());
 }
 
-void ALayerManagerHUD::RegisterLayer(const FString& name, ULayerUI* layer)
+void ALayerManagerHUD::RegisterLayer(const FString& name, ULayerUI* layer, bool current)
 {
 	if (layer)
 	{
-		LayersUI.Add(name, layer);
+		// If registering a layer that already exists prevent it and alert the user
+		// Register layer is supposed to be used before PushToLayer
+		if (LayersUI.Contains(name))
+		{
+			UE_LOG(LogManagerUI, Warning, TEXT("Warning - Tried to register layer that already exists."));
+			return;
+		}
+
+		LayersUI.Emplace(name, layer);
+		if (current)
+			CurrentLayerID = name;
 	}
 	else
 	{
@@ -32,12 +42,13 @@ void ALayerManagerHUD::RemoveLayer(const FString& name)
 	//LayersUI.Remove(name);
 }
 
+UE_DISABLE_OPTIMIZATION
 void ALayerManagerHUD::PushToLayer(const FString& name, UUserWidget* widget)
 {
 	ULayerUI* layer = LayersUI.FindOrAdd(name, NewObject<ULayerUI>());
 	layer->PushToStack(widget);
+	CurrentLayerID = name;
 }
-
 UUserWidget* ALayerManagerHUD::PopFromLayer(const FString& name)
 {
 	ULayerUI** layer = LayersUI.Find(name);
@@ -48,7 +59,14 @@ UUserWidget* ALayerManagerHUD::PopFromLayer(const FString& name)
 	return nullptr;
 }
 
+UUserWidget* ALayerManagerHUD::PopFromCurrentLayer()
+{
+	return PopFromLayer(CurrentLayerID);
+}
+
 ULayerUI* ALayerManagerHUD::GetLayer(const FString& name)
 {
 	return (*LayersUI.Find(name));
 }
+
+UE_ENABLE_OPTIMIZATION

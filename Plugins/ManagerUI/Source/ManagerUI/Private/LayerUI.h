@@ -54,7 +54,7 @@ class UUserWidget;
 /**
  * 
  */
-UCLASS(BlueprintType)
+UCLASS(MinimalAPI, Blueprintable, BlueprintType)
 class ULayerUI : public UObject
 {
 	GENERATED_BODY()
@@ -63,8 +63,11 @@ public:
 	//ULayerUI();
 	void PushToStack(UUserWidget* widget);
 	UUserWidget* PopFromStack();
+
+	UFUNCTION(BlueprintCallable)
 	void SetVisibilityOfLayer(ESlateVisibility visibility);
 
+	UFUNCTION(BlueprintCallable)
 	void ClearStack();
 	//UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	//FOnLayerVisibilityChangedSignature LayerVisibilityChangedDelegate;
@@ -78,5 +81,9 @@ protected:
 	UFUNCTION(BlueprintNativeEvent)
 	void OnWidgetPushed();
 	virtual void OnWidgetPushed_Implementation();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void OnWidgetPopped();
+	virtual void OnWidgetPopped_Implementation();
 
 };

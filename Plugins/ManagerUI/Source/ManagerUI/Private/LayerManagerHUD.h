@@ -20,18 +20,23 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void RegisterDefaultLayer(const FString& name);
 	UFUNCTION(BlueprintCallable)
-	void RegisterLayer(const FString& name, class ULayerUI* layer);
+	void RegisterLayer(const FString& name, class ULayerUI* layer, bool current = false);
 
 	UFUNCTION(BlueprintCallable)
 	void RemoveLayer(const FString& name);
-//	 Adds widget to layer, if layer does not exist a new one is created
+	//	Adds widget to layer, if layer does not exist a new one is created
 	UFUNCTION(BlueprintCallable)
 	void PushToLayer(const FString& name, class UUserWidget* widget);
 	UFUNCTION(BlueprintCallable)
 	UUserWidget* PopFromLayer(const FString& name);
+	UFUNCTION(BlueprintCallable)
+	UUserWidget* PopFromCurrentLayer();
 
 	UFUNCTION(BlueprintCallable)
 		ULayerUI* GetLayer(const FString& name);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	FString CurrentLayerID;
 
 protected:
 	UPROPERTY()

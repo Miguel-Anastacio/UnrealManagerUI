@@ -16,6 +16,7 @@ class UMainMenuWidget : public UUserWidget
 public:
 	UFUNCTION(BlueprintCallable)
 	void AsyncLevelLoad(const FString& levelDir, const FString& levelName);
+
 protected:
 	UFUNCTION()
 	void OnPreheatFinished();
@@ -28,6 +29,7 @@ protected:
 	void StartGame();
 	UFUNCTION()
 	void QuitGame();
+
 protected:
 	// Buttons
 	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)

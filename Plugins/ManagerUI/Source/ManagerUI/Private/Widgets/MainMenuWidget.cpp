@@ -7,7 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "UObject/UObjectGlobals.h"
-#include "Components/CircularThrobber.h"
+#include "LayerManagerHUD.h"
 void UMainMenuWidget::AsyncLevelLoad(const FString& levelDir, const FString& levelName)
 {
 	LoadPackageAsync(levelDir + levelName,
@@ -31,6 +31,11 @@ void UMainMenuWidget::AsyncLevelLoad(const FString& levelDir, const FString& lev
 void UMainMenuWidget::OnPreheatFinished()
 {
 	UGameplayStatics::OpenLevel(GetWorld(), FName(*LevelName));
+	ALayerManagerHUD* hud = Cast<ALayerManagerHUD>(GetOwningPlayer()->GetHUD());
+	if (hud)
+	{
+		hud->PopFromCurrentLayer();
+	}
 }
 
 void UMainMenuWidget::NativeOnInitialized()

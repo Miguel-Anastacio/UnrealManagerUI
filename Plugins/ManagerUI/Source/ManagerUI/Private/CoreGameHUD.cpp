@@ -3,12 +3,19 @@
 
 #include "CoreGameHUD.h"
 #include "Blueprint/UserWidget.h"
+#include "Widgets/MainMenuWidget.h"
 void ACoreGameHUD::BeginPlay()
 {
 	Super::BeginPlay();
 	// Adding widgets to menu layer
-	if(MainMenuClass)
-		PushToLayer(FString("Menu"), CreateWidget<UUserWidget>(GetOwningPlayerController(), MainMenuClass));
+	if (MainMenuClass)
+	{/*
+		UMainMenuWidget* MainMenu = CreateWidget<UMainMenuWidget>(GetOwningPlayerController(), MainMenuClass);
+
+		MainMenu->AddToViewport();
+
+		PushToLayer(FString("Menu"), MainMenu);*/
+	}
 	//if(OptionsMenuClass)
 	//	PushToLayer(FString("Menu"), CreateWidget<UUserWidget>(GetOwningPlayerController(), OptionsMenuClass));
 	if (HUDClass)
