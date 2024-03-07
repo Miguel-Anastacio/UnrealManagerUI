@@ -9,7 +9,7 @@
 
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnUISelectionInputSignature);
 /**
- * 
+ * Custom Button - create custom looks for it by creating BP widgets that inherit from this one
  */
 UCLASS(Abstract, BlueprintType)
 class UButtonWidget : public UUserWidget

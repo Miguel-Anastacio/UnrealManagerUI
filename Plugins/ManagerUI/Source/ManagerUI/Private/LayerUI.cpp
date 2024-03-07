@@ -11,6 +11,7 @@ void ULayerUI::PushToStack(UUserWidget* widget)
 	if (widget)
 	{
 		OnWidgetPushed_Implementation();
+		widget->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 		WidgetStack.Push(widget);
 
 	}
@@ -45,6 +46,16 @@ void ULayerUI::ClearStack()
 {
 	SetVisibilityOfLayer(ESlateVisibility::Collapsed);
 	WidgetStack.Empty();
+}
+
+void ULayerUI::OnWidgetPushedOthers_Implementation(const TArray<ULayerUI*>& otherLayers)
+{
+
+}
+
+void ULayerUI::OnWidgetPoppedOthers_Implementation(const TArray<ULayerUI*>& otherLayers)
+{
+
 }
 
 void ULayerUI::OnWidgetPushed_Implementation()

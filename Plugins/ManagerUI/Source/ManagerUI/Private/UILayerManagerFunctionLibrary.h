@@ -10,11 +10,16 @@
  * 
  */
 UCLASS()
-class UUILayerManagerFunctionLibrary : public UBlueprintFunctionLibrary
+class MANAGERUI_API UUILayerManagerFunctionLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 
 public:
+	// Usually used when adding widgets to layer from outside of the HUD class
 	UFUNCTION(BlueprintCallable, Category = "UI Utils")
-	static void AddWidgetToLayer(TSubclassOf<class UUserWidget> widgetClass, const FString& layerName, APlayerController* controller);
+	static UUserWidget* AddWidgetToLayer(TSubclassOf<class UUserWidget> widgetClass, const FString& layerName, APlayerController* controller);
+
+	UFUNCTION(BlueprintCallable, Category = "UI Utils")
+	static void ToggleWidgetVisibility(class UUserWidget* widget, const FString& layerName, APlayerController* controller);
+	//static UUserWidget* ToggleWi(TSubclassOf<class UUserWidget> widgetClass, const FString& layerName, APlayerController* controller);
 };

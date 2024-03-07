@@ -23,3 +23,23 @@ void ACoreGameHUD::BeginPlay()
 	if (ConfirmModalClass)
 		PushToLayer(FString("Modal"), CreateWidget<UUserWidget>(GetOwningPlayerController(), ConfirmModalClass));
 }
+
+void ACoreGameHUD::ToggleInventory_Implementation()
+{
+
+}
+
+void ACoreGameHUD::SetHUDWidget(UUserWidget* widget)
+{
+	HUDWidget = widget;
+}
+
+void ACoreGameHUD::SetInventoryWidget(UUserWidget* widget)
+{
+	InventoryWidget = widget;
+}
+
+void ACoreGameHUD::TogglePause_Implementation()
+{
+
+}

@@ -3,6 +3,7 @@
 
 #include "LayerManagerHUD.h"
 #include "ManagerUI.h"
+#include "LayerUI.h"
 
 void ALayerManagerHUD::RegisterDefaultLayer(const FString& name)
 {
@@ -15,9 +16,12 @@ void ALayerManagerHUD::RegisterLayer(const FString& name, ULayerUI* layer, bool 
 	{
 		// If registering a layer that already exists prevent it and alert the user
 		// Register layer is supposed to be used before PushToLayer
-		if (LayersUI.Contains(name))
+		ULayerUI** existingLayer = LayersUI.Find(name);
+		if (existingLayer)
 		{
-			UE_LOG(LogManagerUI, Warning, TEXT("Warning - Tried to register layer that already exists."));
+			(*existingLayer)->Type = layer->Type;
+			UE_LOG(LogManagerUI, Warning, TEXT("Tried to register layer that already exists."));
+
 			return;
 		}
 
@@ -27,7 +31,7 @@ void ALayerManagerHUD::RegisterLayer(const FString& name, ULayerUI* layer, bool 
 	}
 	else
 	{
-		UE_LOG(LogManagerUI, Error, TEXT("ERROR - Tried to register invalid layer"));
+		UE_LOG(LogManagerUI, Error, TEXT("Tried to register invalid layer"));
 	}
 }
 
@@ -38,30 +42,78 @@ void ALayerManagerHUD::RemoveLayer(const FString& name)
 	{
 		layer->ClearStack();
 	}
-
 	//LayersUI.Remove(name);
 }
 
 UE_DISABLE_OPTIMIZATION
 void ALayerManagerHUD::PushToLayer(const FString& name, UUserWidget* widget)
 {
-	ULayerUI* layer = LayersUI.FindOrAdd(name, NewObject<ULayerUI>());
+	ULayerUI* layer;
+	TArray<ULayerUI*> layersValue;
+	// if it already exists
+	// save data remove it, generate array from map, and add layer again
+	if (LayersUI.RemoveAndCopyValue(name, layer))
+	{
+		LayersUI.GenerateValueArray(layersValue);
+		LayersUI.Add(name, layer);
+	}
+	else
+	{
+		LayersUI.GenerateValueArray(layersValue);
+	}
+
+	// layersValue now contains all layers except the one we are pushing to
+
+	// did not find a layer so add a generic one
+	if (!IsValid(layer))
+	{
+		layer = NewObject<ULayerUI>();
+		LayersUI.Add(name, layer);
+	}
+
 	layer->PushToStack(widget);
+	// pass all other layers 
+	layer->OnWidgetPushedOthers(layersValue);
+
 	CurrentLayerID = name;
 }
 UUserWidget* ALayerManagerHUD::PopFromLayer(const FString& name)
 {
-	ULayerUI** layer = LayersUI.Find(name);
+	ULayerUI* layer;
+	TArray<ULayerUI*> layersValue;
+	// if it already exists
+	// save data remove it, generate array from map, and add layer again
+	if (LayersUI.RemoveAndCopyValue(name, layer))
+	{
+		LayersUI.GenerateValueArray(layersValue);
+		LayersUI.Add(name, layer);
+	}
+	else
+	{
+		LayersUI.GenerateValueArray(layersValue);
+	}
+
 	if (layer)
 	{
-		return (*layer)->PopFromStack();
+		layer->OnWidgetPoppedOthers(layersValue);
+		return layer->PopFromStack();
 	}
+	
 	return nullptr;
 }
 
 UUserWidget* ALayerManagerHUD::PopFromCurrentLayer()
 {
 	return PopFromLayer(CurrentLayerID);
+}
+
+void ALayerManagerHUD::ClearAllLayers()
+{
+	for (auto& elem : LayersUI)
+	{
+		elem.Value->ClearStack();
+	}
+	LayersUI.Empty();
 }
 
 ULayerUI* ALayerManagerHUD::GetLayer(const FString& name)

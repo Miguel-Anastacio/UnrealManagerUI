@@ -4,15 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
-#include "LayerUI.h"
 #include "LayerManagerHUD.generated.h"
 
 /**
  * 
  */
 class UUserWidget;
-UCLASS(MinimalAPI, Blueprintable, BlueprintType)
-class ALayerManagerHUD : public AHUD
+//class LayerUI
+UCLASS( Blueprintable, BlueprintType)
+class MANAGERUI_API ALayerManagerHUD : public AHUD
 {
 	GENERATED_BODY()
 
@@ -21,9 +21,9 @@ public:
 	void RegisterDefaultLayer(const FString& name);
 	UFUNCTION(BlueprintCallable)
 	void RegisterLayer(const FString& name, class ULayerUI* layer, bool current = false);
-
 	UFUNCTION(BlueprintCallable)
 	void RemoveLayer(const FString& name);
+
 	//	Adds widget to layer, if layer does not exist a new one is created
 	UFUNCTION(BlueprintCallable)
 	void PushToLayer(const FString& name, class UUserWidget* widget);
@@ -33,12 +33,17 @@ public:
 	UUserWidget* PopFromCurrentLayer();
 
 	UFUNCTION(BlueprintCallable)
-		ULayerUI* GetLayer(const FString& name);
+	void ClearAllLayers();
 
+	UFUNCTION(BlueprintCallable)
+	ULayerUI* GetLayer(const FString& name);
+
+
+public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FString CurrentLayerID;
 
 protected:
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	TMap<FString, class ULayerUI*> LayersUI;
 };

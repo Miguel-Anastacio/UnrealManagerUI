@@ -44,6 +44,7 @@ protected:
 	// Directory of level that you wish to load when pressing the start Button
 	UPROPERTY(EditAnywhere, Category = "Start Level")
 	FString LevelDirectory;
+
 	UPROPERTY(EditAnywhere, Category = "Start Level")
 	float MinimumLevelLoadTime;
 

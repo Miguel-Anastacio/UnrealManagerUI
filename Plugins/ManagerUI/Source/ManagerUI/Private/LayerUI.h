@@ -10,6 +10,9 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLayerVisibilityChangedSignature, ESlateVisibility, state);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWidgetPushedSignature);
 
+// How many widgets can be visible at the same time
+// SINGLE - one
+// MULTIPLE - several
 UENUM(BlueprintType)
 enum LayerType
 {
@@ -69,19 +72,33 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ClearStack();
+
+	// this defines the impact that pushing to this layer has on the other layers
+	UFUNCTION(BlueprintNativeEvent)
+	void OnWidgetPushedOthers(const TArray<ULayerUI*>& otherLayers);
+	virtual void OnWidgetPushedOthers_Implementation(const TArray<ULayerUI*>& otherLayers);
+
+	// this defines the impact that pushing to this layer has on the other layers
+	UFUNCTION(BlueprintNativeEvent)
+	void OnWidgetPoppedOthers(const TArray<ULayerUI*>& otherLayers);
+	virtual void OnWidgetPoppedOthers_Implementation(const TArray<ULayerUI*>& otherLayers);
+
 	//UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	//FOnLayerVisibilityChangedSignature LayerVisibilityChangedDelegate;
 
+public:
 	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpawn = true));
 	TEnumAsByte<LayerType> Type = SINGLE;
 protected:
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 		TArray<class UUserWidget*> WidgetStack;
 
+	// called when pushing a widget by default uses the layerType to hide/not hide the other widgets
 	UFUNCTION(BlueprintNativeEvent)
 	void OnWidgetPushed();
 	virtual void OnWidgetPushed_Implementation();
 
+	// called when popping a widget by default - nothing
 	UFUNCTION(BlueprintNativeEvent)
 	void OnWidgetPopped();
 	virtual void OnWidgetPopped_Implementation();

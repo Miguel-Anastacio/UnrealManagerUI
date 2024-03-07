@@ -6,6 +6,7 @@
 
 void UGameHUDWidget::NativeOnInitialized()
 {
+	Super::OnInitialized();
 	// in this example
 	// we just set the text to be the name of the player
 	ULocalPlayer* player = GetOwningLocalPlayer();
