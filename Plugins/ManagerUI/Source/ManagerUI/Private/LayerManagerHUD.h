@@ -38,7 +38,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	ULayerUI* GetLayer(const FString& name);
 
-
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FString CurrentLayerID;

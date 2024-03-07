@@ -48,7 +48,7 @@ void ALayerManagerHUD::RemoveLayer(const FString& name)
 UE_DISABLE_OPTIMIZATION
 void ALayerManagerHUD::PushToLayer(const FString& name, UUserWidget* widget)
 {
-	ULayerUI* layer;
+	ULayerUI* layer = nullptr;
 	TArray<ULayerUI*> layersValue;
 	// if it already exists
 	// save data remove it, generate array from map, and add layer again

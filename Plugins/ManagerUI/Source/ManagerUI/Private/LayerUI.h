@@ -83,6 +83,11 @@ public:
 	void OnWidgetPoppedOthers(const TArray<ULayerUI*>& otherLayers);
 	virtual void OnWidgetPoppedOthers_Implementation(const TArray<ULayerUI*>& otherLayers);
 
+	// this defines the impact that clearing this layer has on its widgets 
+	UFUNCTION(BlueprintNativeEvent)
+	void OnLayerCleared();
+	// by default it just changes their visibility to collapsed
+	virtual void OnLayerCleared_Implementation();
 	//UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	//FOnLayerVisibilityChangedSignature LayerVisibilityChangedDelegate;
 
@@ -91,7 +96,7 @@ public:
 	TEnumAsByte<LayerType> Type = SINGLE;
 protected:
 	UPROPERTY(VisibleAnywhere)
-		TArray<class UUserWidget*> WidgetStack;
+	TArray<class UUserWidget*> WidgetStack;
 
 	// called when pushing a widget by default uses the layerType to hide/not hide the other widgets
 	UFUNCTION(BlueprintNativeEvent)

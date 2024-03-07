@@ -44,7 +44,7 @@ void ULayerUI::SetVisibilityOfLayer(ESlateVisibility visibility)
 
 void ULayerUI::ClearStack()
 {
-	SetVisibilityOfLayer(ESlateVisibility::Collapsed);
+	OnLayerCleared();
 	WidgetStack.Empty();
 }
 
@@ -56,6 +56,11 @@ void ULayerUI::OnWidgetPushedOthers_Implementation(const TArray<ULayerUI*>& othe
 void ULayerUI::OnWidgetPoppedOthers_Implementation(const TArray<ULayerUI*>& otherLayers)
 {
 
+}
+
+void ULayerUI::OnLayerCleared_Implementation()
+{
+	SetVisibilityOfLayer(ESlateVisibility::Collapsed);
 }
 
 void ULayerUI::OnWidgetPushed_Implementation()
