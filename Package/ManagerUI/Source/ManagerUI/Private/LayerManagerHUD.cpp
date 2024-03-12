@@ -79,16 +79,11 @@ void ALayerManagerHUD::PushToLayer(const FString& name, UUserWidget* widget)
 	// pass all other layers 
 	layer->OnWidgetPushedOthers(layersValue);
 
-	if (CurrentLayerID != name)
-	{
-		LayerOrder.Add(name);
-	}
-
 	CurrentLayerID = name;
 }
 UUserWidget* ALayerManagerHUD::PopFromLayer(const FString& name)
 {
-	ULayerUI* layer = NULL;
+	ULayerUI* layer;
 	TArray<ULayerUI*> layersValue;
 	// if it already exists
 	// save data remove it, generate array from map, and add layer again
@@ -105,22 +100,7 @@ UUserWidget* ALayerManagerHUD::PopFromLayer(const FString& name)
 	if (layer)
 	{
 		layer->OnWidgetPoppedOthers(layersValue);
-		UUserWidget* widget = layer->PopFromStack();
-
-		if (layer->IsLayerEmpty() && LayerOrder.Num() > 0)
-		{
-			LayerOrder.Pop();
-			if (LayerOrder.Num() > 0)
-			{
-				CurrentLayerID = LayerOrder.Top();
-			}
-			else
-			{
-				CurrentLayerID = FString("");
-			}
-		}
-
-		return widget;
+		return layer->PopFromStack();
 	}
 	
 	return nullptr;
@@ -140,33 +120,8 @@ void ALayerManagerHUD::ClearAllLayers()
 	LayersUI.Empty();
 }
 
-void ALayerManagerHUD::ClearLayer(const FString& name)
-{
-	auto layer = LayersUI.Find(name);
-	if (layer)
-	{
-		(*layer)->ClearStack();
-	}
-}
-
-FString ALayerManagerHUD::GetCurrentLayerTag() const
-{
-	return CurrentLayerID;
-}
-
-ULayerUI* ALayerManagerHUD::GetLayer(const FString& name) const
+ULayerUI* ALayerManagerHUD::GetLayer(const FString& name)
 {
 	return (*LayersUI.Find(name));
-}
-
-UUserWidget* ALayerManagerHUD::PeakLayer(const FString& name) const 
-{
-	const auto layer = LayersUI.Find(name);
-	if (layer)
-	{
-		return (*layer)->PeakStack();
-	}
-
-	return nullptr;
 }
 

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "WidgetReactionInterface.h"
 #include "ButtonWidget.generated.h"
 
 
@@ -12,17 +13,17 @@
  * Custom Button - create custom looks for it by creating BP widgets that inherit from this one
  */
 UCLASS(Abstract, BlueprintType)
-class UButtonWidget : public UUserWidget
+class MANAGERUI_API UButtonWidget : public UUserWidget, public IWidgetReactionInterface
 {
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, BlueprintPure) 
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Button") 
 	class UButton* GetButton() const { return Button; };
 
 	virtual void NativePreConstruct() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Text")
 	FText Text;
 
 	//// Delegate to use when we wish to trigger the button through an input action

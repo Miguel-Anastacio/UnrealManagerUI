@@ -7,8 +7,6 @@
 
 #include "LayerUI.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLayerVisibilityChangedSignature, ESlateVisibility, state);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWidgetPushedSignature);
 
 // How many widgets can be visible at the same time
 // SINGLE - one
@@ -21,44 +19,12 @@ enum LayerType
 };
 
 class UUserWidget;
-//USTRUCT(BlueprintType)
-//struct FUILayer
-//{
-//	GENERATED_USTRUCT_BODY()
-//	FUILayer() {};
-//
-//	void PushToStack(UUserWidget* widget);
-//	UUserWidget* PopFromStack();
-//	void SetVisibilityOfLayer(ESlateVisibility visibility);
-//
-//
-//	//UFUNCTION(BlueprintNativeEvent)
-//	//void OnWidgetPushed();
-//
-//	//virtual void OnWidgetPushed_Implementaion();
-//
-//	UPROPERTY(BlueprintAssignable, BlueprintCallable)
-//	FOnLayerVisibilityChangedSignature LayerVisibilityChangedDelegate;
-//
-//	//UPROPERTY(BlueprintAssignable, BlueprintCallable)
-//	//FOnWidgetPushedSignature WidgetPushedDelegate;
-//
-//	LayerType Type = SINGLE;
-//
-//private:
-//	UPROPERTY()
-//	TArray<UUserWidget*> WidgetStack;
-//
-//
-//};
-
-
 
 /**
  * 
  */
-UCLASS(MinimalAPI, Blueprintable, BlueprintType)
-class ULayerUI : public UObject
+UCLASS(Blueprintable, BlueprintType)
+class MANAGERUI_API ULayerUI : public UObject
 {
 	GENERATED_BODY()
 
@@ -67,45 +33,54 @@ public:
 	void PushToStack(UUserWidget* widget);
 	UUserWidget* PopFromStack();
 
-	UFUNCTION(BlueprintCallable)
+	UUserWidget* PeakStack() const; 
+	bool IsLayerEmpty() const;
+
+	UFUNCTION(BlueprintCallable, Category = Layer)
 	void SetVisibilityOfLayer(ESlateVisibility visibility);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = Layer)
 	void ClearStack();
 
 	// this defines the impact that pushing to this layer has on the other layers
-	UFUNCTION(BlueprintNativeEvent)
+	UFUNCTION(BlueprintNativeEvent, Category = "Layer Reaction")
 	void OnWidgetPushedOthers(const TArray<ULayerUI*>& otherLayers);
 	virtual void OnWidgetPushedOthers_Implementation(const TArray<ULayerUI*>& otherLayers);
 
 	// this defines the impact that pushing to this layer has on the other layers
-	UFUNCTION(BlueprintNativeEvent)
+	UFUNCTION(BlueprintNativeEvent, Category = Layer)
 	void OnWidgetPoppedOthers(const TArray<ULayerUI*>& otherLayers);
 	virtual void OnWidgetPoppedOthers_Implementation(const TArray<ULayerUI*>& otherLayers);
 
 	// this defines the impact that clearing this layer has on its widgets 
-	UFUNCTION(BlueprintNativeEvent)
+	UFUNCTION(BlueprintNativeEvent, Category = Layer)
 	void OnLayerCleared();
 	// by default it just changes their visibility to collapsed
 	virtual void OnLayerCleared_Implementation();
-	//UPROPERTY(BlueprintAssignable, BlueprintCallable)
-	//FOnLayerVisibilityChangedSignature LayerVisibilityChangedDelegate;
+
 
 public:
-	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpawn = true));
+	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpawn = true), Category = Layer);
 	TEnumAsByte<LayerType> Type = SINGLE;
+
+	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpawn = true), Category = Layer);
+	TEnumAsByte<ESlateVisibility> VisibleState = ESlateVisibility::SelfHitTestInvisible;
+
+	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpawn = true), Category = Layer);
+	TEnumAsByte<ESlateVisibility> HiddenState = ESlateVisibility::Collapsed;
+
 protected:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = Layer)
 	TArray<class UUserWidget*> WidgetStack;
 
 	// called when pushing a widget by default uses the layerType to hide/not hide the other widgets
-	UFUNCTION(BlueprintNativeEvent)
-	void OnWidgetPushed();
-	virtual void OnWidgetPushed_Implementation();
+	UFUNCTION(BlueprintNativeEvent, Category = Layer)
+	void OnWidgetPushed(class UUserWidget* widget);
+	virtual void OnWidgetPushed_Implementation(class UUserWidget* widget);
 
 	// called when popping a widget by default - nothing
-	UFUNCTION(BlueprintNativeEvent)
-	void OnWidgetPopped();
-	virtual void OnWidgetPopped_Implementation();
+	UFUNCTION(BlueprintNativeEvent, Category = Layer)
+	void OnWidgetPopped(class UUserWidget* widget);
+	virtual void OnWidgetPopped_Implementation(class UUserWidget* widget);
 
 };

@@ -17,32 +17,32 @@ class MANAGERUI_API ALayerManagerHUD : public AHUD
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = Layer)
 	void RegisterDefaultLayer(const FString& name);
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = Layer)
 	void RegisterLayer(const FString& name, class ULayerUI* layer, bool current = false);
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = Layer)
 	void RemoveLayer(const FString& name);
 
 	//	Adds widget to layer, if layer does not exist a new one is created
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = Layer)
 	void PushToLayer(const FString& name, class UUserWidget* widget);
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = Layer)
 	UUserWidget* PopFromLayer(const FString& name);
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = Layer)
 	UUserWidget* PopFromCurrentLayer();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = Layer)
 	void ClearAllLayers();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = Layer)
 	ULayerUI* GetLayer(const FString& name);
 
 public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Layer)
 	FString CurrentLayerID;
 
 protected:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = Layer)
 	TMap<FString, class ULayerUI*> LayersUI;
 };

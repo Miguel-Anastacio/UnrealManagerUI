@@ -10,7 +10,7 @@ void ULayerUI::PushToStack(UUserWidget* widget)
 {
 	if (widget)
 	{
-		OnWidgetPushed(widget);
+		OnWidgetPushed_Implementation(widget);
 		WidgetStack.Push(widget);
 	}
 	//WidgetPushedDelegate.Broadcast();
@@ -23,22 +23,9 @@ UUserWidget* ULayerUI::PopFromStack()
 
 	UUserWidget* widget = WidgetStack.Pop();
 	//widget->SetVisibility(ESlateVisibility::Collapsed);
-	OnWidgetPopped(widget);
+	OnWidgetPopped_Implementation(widget);
 
 	return widget;
-}
-
-UUserWidget* ULayerUI::PeakStack() const
-{
-	if (WidgetStack.IsEmpty())
-		return nullptr;
-
-	return WidgetStack.Top();
-}
-
-bool ULayerUI::IsLayerEmpty() const
-{
-	return WidgetStack.IsEmpty();
 }
 
 void ULayerUI::SetVisibilityOfLayer(ESlateVisibility visibility)
@@ -71,18 +58,18 @@ void ULayerUI::OnWidgetPoppedOthers_Implementation(const TArray<ULayerUI*>& othe
 
 void ULayerUI::OnLayerCleared_Implementation()
 {
-	SetVisibilityOfLayer(HiddenState);
+	SetVisibilityOfLayer(ESlateVisibility::Collapsed);
 }
 
 void ULayerUI::OnWidgetPushed_Implementation(UUserWidget* widget)
 {
 	if(widget)
-		widget->SetVisibility(VisibleState);
+		widget->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 
 	switch (Type)
 	{
 	case SINGLE:
-		SetVisibilityOfLayer(HiddenState);
+		SetVisibilityOfLayer(ESlateVisibility::Collapsed);
 		//ClearStack();
 		break;
 	case MULTIPLE:
@@ -94,19 +81,18 @@ void ULayerUI::OnWidgetPushed_Implementation(UUserWidget* widget)
 }
 void ULayerUI::OnWidgetPopped_Implementation(UUserWidget* widget)
 {
-	if(widget)
-	{
-		widget->SetVisibility(HiddenState);
-	}
-
 	switch (Type)
 	{
 	case SINGLE:
 		// hide popped widget
+		if(widget)
+		{
+			widget->SetVisibility(ESlateVisibility::Collapsed);
+		}
 		// how widget on top of the stack
 		if (WidgetStack.IsEmpty())
 			return;
-		WidgetStack.Top()->SetVisibility(VisibleState);
+		WidgetStack.Top()->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 		break;
 	case MULTIPLE:
 

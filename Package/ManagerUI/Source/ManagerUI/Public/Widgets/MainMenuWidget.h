@@ -10,16 +10,16 @@
  * 
  */
 UCLASS(Abstract, BlueprintType)
-class UMainMenuWidget : public UUserWidget
+class MANAGERUI_API UMainMenuWidget : public UUserWidget
 {
 	GENERATED_BODY()
 public:
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Load")
 	void AsyncLevelLoad(const FString& levelDir, const FString& levelName);
 
 protected:
 	UFUNCTION()
-	void OnPreheatFinished();
+	void OnPreheatFinished() const;
 
 	virtual void NativeOnInitialized() override;
 	void AsyncLevelLoadFinished(const FString& LevelName);
@@ -32,9 +32,9 @@ protected:
 
 protected:
 	// Buttons
-	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)
+	UPROPERTY(meta = (BindWidget), BlueprintReadWrite, Category = "Widget")
 	TObjectPtr<class UButtonWidget> StartButton;
-	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)
+	UPROPERTY(meta = (BindWidget), BlueprintReadWrite, Category = "Widget")
 	TObjectPtr<class UButtonWidget> QuitButton;
 
 

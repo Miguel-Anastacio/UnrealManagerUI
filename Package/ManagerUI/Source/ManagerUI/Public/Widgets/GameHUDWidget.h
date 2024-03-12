@@ -10,7 +10,7 @@
  * 
  */
 UCLASS(Abstract, BlueprintType)
-class UGameHUDWidget : public UUserWidget
+class MANAGERUI_API UGameHUDWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	

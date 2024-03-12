@@ -2,7 +2,7 @@
 
 
 #include "UIActionsComponent.h"
-#include "../Plugins/ManagerUI/Source/ManagerUI/Private/CoreGameHUD.h"
+#include "../Plugins/ManagerUI/Source/ManagerUI/Public/CoreGameHUD.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/PlayerController.h"
