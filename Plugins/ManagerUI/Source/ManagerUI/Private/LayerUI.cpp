@@ -53,6 +53,14 @@ void ULayerUI::SetVisibilityOfLayer(ESlateVisibility visibility)
 	//LayerVisibilityChangedDelegate.Broadcast(visibility);
 }
 
+ESlateVisibility ULayerUI::GetVisibilityOfLayer() const
+{
+	if (WidgetStack.IsEmpty())
+		return ESlateVisibility::Collapsed;
+
+	return PeakStack()->GetVisibility();
+}
+
 void ULayerUI::ClearStack()
 {
 	OnLayerCleared();
@@ -81,12 +89,11 @@ void ULayerUI::OnWidgetPushed_Implementation(UUserWidget* widget)
 
 	switch (Type)
 	{
-	case SINGLE:
+	case LayerType::SINGLE:
 		SetVisibilityOfLayer(HiddenState);
 		//ClearStack();
 		break;
-	case MULTIPLE:
-
+	case LayerType::MULTIPLE:
 		break;
 	default:
 		break;
@@ -101,14 +108,14 @@ void ULayerUI::OnWidgetPopped_Implementation(UUserWidget* widget)
 
 	switch (Type)
 	{
-	case SINGLE:
+	case LayerType::SINGLE:
 		// hide popped widget
 		// how widget on top of the stack
 		if (WidgetStack.IsEmpty())
 			return;
 		WidgetStack.Top()->SetVisibility(VisibleState);
 		break;
-	case MULTIPLE:
+	case LayerType::MULTIPLE:
 
 		break;
 	default:

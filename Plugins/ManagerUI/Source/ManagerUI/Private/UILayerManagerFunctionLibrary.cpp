@@ -6,6 +6,7 @@
 #include "LayerManagerHUD.h"
 #include "Blueprint/UserWidget.h"
 
+UE_DISABLE_OPTIMIZATION
 UUserWidget* UUILayerManagerFunctionLibrary::AddWidgetToLayer(TSubclassOf<class UUserWidget> widgetClass, const FString& layerName, APlayerController* controller)
 {
 	UUserWidget* widget = CreateWidget<UUserWidget>(controller, widgetClass);
@@ -28,7 +29,7 @@ void UUILayerManagerFunctionLibrary::ToggleWidgetVisibility(UUserWidget* widget,
 	ALayerManagerHUD* hud = Cast<ALayerManagerHUD>(controller->GetHUD());
 	if (hud && widget)
 	{
-		if (widget->IsVisible())
+		if (widget == hud->PeakLayer(layerName))
 		{
 			hud->PopFromLayer(layerName);
 		}
@@ -38,3 +39,4 @@ void UUILayerManagerFunctionLibrary::ToggleWidgetVisibility(UUserWidget* widget,
 		}
 	}
 }
+UE_ENABLE_OPTIMIZATION

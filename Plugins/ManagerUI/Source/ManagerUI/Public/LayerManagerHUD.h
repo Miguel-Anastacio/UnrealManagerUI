@@ -47,6 +47,8 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = Layer)
 	UUserWidget* PeakLayer(const FString& name) const;
 
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = Layer)
+	bool IsWidgetOnTopOfLayer(const FString& name, class UUserWidget* widget) const;
 
 
 public:

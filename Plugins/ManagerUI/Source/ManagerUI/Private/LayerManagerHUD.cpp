@@ -9,7 +9,7 @@ void ALayerManagerHUD::RegisterDefaultLayer(const FString& name)
 {
 	LayersUI.Emplace(name, NewObject<ULayerUI>());
 }
-
+UE_DISABLE_OPTIMIZATION
 void ALayerManagerHUD::RegisterLayer(const FString& name, ULayerUI* layer, bool current)
 {
 	if (layer)
@@ -169,4 +169,25 @@ UUserWidget* ALayerManagerHUD::PeakLayer(const FString& name) const
 
 	return nullptr;
 }
+bool ALayerManagerHUD::IsWidgetOnTopOfLayer(const FString& name, UUserWidget* widget) const
+{
+	const auto layer = LayersUI.Find(name);
+	if (layer)
+	{
+		if ((*layer)->IsLayerEmpty())
+			return false;
+
+		if((*layer)->PeakStack() == widget)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	return false;
+}
+UE_ENABLE_OPTIMIZATION
 

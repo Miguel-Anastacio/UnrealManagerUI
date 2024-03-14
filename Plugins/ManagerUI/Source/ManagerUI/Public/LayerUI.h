@@ -7,12 +7,11 @@
 
 #include "LayerUI.generated.h"
 
-
 // How many widgets can be visible at the same time
 // SINGLE - one
 // MULTIPLE - several
 UENUM(BlueprintType)
-enum LayerType
+enum class LayerType : uint8
 {
 	SINGLE UMETA(DisplayName = "Single"),
 	MULTIPLE   UMETA(DisplayName = "Multiple"),
@@ -40,6 +39,9 @@ public:
 	void SetVisibilityOfLayer(ESlateVisibility visibility);
 
 	UFUNCTION(BlueprintCallable, Category = Layer)
+	ESlateVisibility GetVisibilityOfLayer() const;
+
+	UFUNCTION(BlueprintCallable, Category = Layer)
 	void ClearStack();
 
 	// this defines the impact that pushing to this layer has on the other layers
@@ -60,14 +62,14 @@ public:
 
 
 public:
-	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpawn = true), Category = Layer);
-	TEnumAsByte<LayerType> Type = SINGLE;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (ExposeOnSpawn = true), Category = Layer);
+	LayerType Type = LayerType::SINGLE;
 
-	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpawn = true), Category = Layer);
-	TEnumAsByte<ESlateVisibility> VisibleState = ESlateVisibility::SelfHitTestInvisible;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere,  meta = (ExposeOnSpawn = true), Category = Layer);
+	ESlateVisibility VisibleState = ESlateVisibility::SelfHitTestInvisible;
 
-	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpawn = true), Category = Layer);
-	TEnumAsByte<ESlateVisibility> HiddenState = ESlateVisibility::Collapsed;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (ExposeOnSpawn = true), Category = Layer);
+	ESlateVisibility HiddenState = ESlateVisibility::Collapsed;
 
 protected:
 	UPROPERTY(VisibleAnywhere, Category = Layer)
