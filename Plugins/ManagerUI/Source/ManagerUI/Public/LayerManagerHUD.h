@@ -7,7 +7,8 @@
 #include "LayerManagerHUD.generated.h"
 
 /**
- * 
+ * Simplifies the management of UI in game by adding fucntionality that splits widgets into different layers
+ * Each layer can be customized to react differently when a widget is added or removed
  */
 class UUserWidget;
 //class LayerUI
@@ -27,8 +28,10 @@ public:
 	//	Adds widget to layer, if layer does not exist a new one is created
 	UFUNCTION(BlueprintCallable, Category = Layer)
 	void PushToLayer(const FString& name, class UUserWidget* widget);
+	// Removes widget from top of layer
 	UFUNCTION(BlueprintCallable, Category = Layer)
 	UUserWidget* PopFromLayer(const FString& name);
+	// Removes widget from top of layer
 	UFUNCTION(BlueprintCallable, Category = Layer)
 	UUserWidget* PopFromCurrentLayer();
 
@@ -44,9 +47,11 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = Layer)
 	FString GetCurrentLayerTag() const;
 
+	// Retrieve the widget from the top of a layer without changing the layer
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = Layer)
 	UUserWidget* PeakLayer(const FString& name) const;
 
+	// Evaluates if a widgets is on the top of a specific layer
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = Layer)
 	bool IsWidgetOnTopOfLayer(const FString& name, class UUserWidget* widget) const;
 
@@ -59,6 +64,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = Layer)
 	TMap<FString, class ULayerUI*> LayersUI;
 
+	// Keeps track of the order of layers visible on the viewport
 	UPROPERTY()
 	TArray<FString> LayerOrder;
 };

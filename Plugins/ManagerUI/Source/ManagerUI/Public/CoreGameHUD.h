@@ -7,7 +7,7 @@
 #include "CoreGameHUD.generated.h"
 
 /**
- * 
+ * Example HUD that inherits from the LayerManager HUD
  */
 UCLASS()
 class MANAGERUI_API ACoreGameHUD : public ALayerManagerHUD

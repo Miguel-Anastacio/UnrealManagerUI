@@ -20,7 +20,10 @@ enum class LayerType : uint8
 class UUserWidget;
 
 /**
- * 
+ * UObject that keeps a stack of UserWidgets
+ * Create layers that inherit from this to override the reactions when a widget is added or removed to a layer
+ * It is also possible to define the impact that pushing/popping to a layer has on the other layers 
+ *
  */
 UCLASS(Blueprintable, BlueprintType)
 class MANAGERUI_API ULayerUI : public UObject
@@ -29,11 +32,14 @@ class MANAGERUI_API ULayerUI : public UObject
 
 public:
 	//ULayerUI();
+	// You should not call these functions outside of a layer object or the layer manager
 	void PushToStack(UUserWidget* widget);
 	UUserWidget* PopFromStack();
 
 	UUserWidget* PeakStack() const; 
 	bool IsLayerEmpty() const;
+	//////////////////////////////////////
+
 
 	UFUNCTION(BlueprintCallable, Category = Layer)
 	void SetVisibilityOfLayer(ESlateVisibility visibility);
@@ -57,7 +63,7 @@ public:
 	// this defines the impact that clearing this layer has on its widgets 
 	UFUNCTION(BlueprintNativeEvent, Category = Layer)
 	void OnLayerCleared();
-	// by default it just changes their visibility to collapsed
+	// by default it just changes the widgets visibility to hidden state
 	virtual void OnLayerCleared_Implementation();
 
 
@@ -65,9 +71,11 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (ExposeOnSpawn = true), Category = Layer);
 	LayerType Type = LayerType::SINGLE;
 
+	// The visibility to set the widget when it is pushed to the layer
 	UPROPERTY(BlueprintReadWrite, EditAnywhere,  meta = (ExposeOnSpawn = true), Category = Layer);
 	ESlateVisibility VisibleState = ESlateVisibility::SelfHitTestInvisible;
 
+	// The visibility to set the widget when it is popped from the layer
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (ExposeOnSpawn = true), Category = Layer);
 	ESlateVisibility HiddenState = ESlateVisibility::Collapsed;
 

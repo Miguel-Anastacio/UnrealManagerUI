@@ -7,7 +7,7 @@
 #include "UILayerManagerFunctionLibrary.generated.h"
 
 /**
- * 
+ *  Utility fucntion library to simplify interacting with the LayerManagerHUD from outside the HUD class
  */
 UCLASS()
 class MANAGERUI_API UUILayerManagerFunctionLibrary : public UBlueprintFunctionLibrary

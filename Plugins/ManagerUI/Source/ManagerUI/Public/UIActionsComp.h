@@ -31,7 +31,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Action Mapping")
 	void RemoveUIMappingContext(class UEnhancedInputLocalPlayerSubsystem* subsystem);
 
-
 	UFUNCTION(BlueprintCallable, Category = Action)
 	void ToggleInventory();
 	UFUNCTION(BlueprintCallable, Category = Action)

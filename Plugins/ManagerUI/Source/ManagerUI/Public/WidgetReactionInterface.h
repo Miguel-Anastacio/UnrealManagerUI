@@ -14,7 +14,8 @@ class MANAGERUI_API UWidgetReactionInterface : public UInterface
 };
 
 /**
- * 
+ * Interface adds events to define behaviour when widget is pushed/popped to/from a layer
+ * This events are supposed to be called by creating custom LayersUI either in C++ or blueprints
  */
 class MANAGERUI_API IWidgetReactionInterface
 {
